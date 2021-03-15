@@ -1,4 +1,5 @@
 from django.contrib import admin
+# noinspection PyUnresolvedReferences
 from mainapp.models import ProductCategory, Product
 
 

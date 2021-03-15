@@ -1,9 +1,11 @@
 import json
 import os
 
-from django.shortcuts import render
 from django.conf import settings
+from django.shortcuts import render
+# noinspection PyUnresolvedReferences
 from mainapp.models import Product, ProductCategory
+
 
 
 def main(request):

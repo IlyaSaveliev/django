@@ -1,5 +1,6 @@
 from django.urls import path
-from mainapp.views import mainapp
+# noinspection PyUnresolvedReferences
+from mainapp import views as mainapp
 
 app_name = 'mainapp'
 
