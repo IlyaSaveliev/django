@@ -2,9 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import auth
 from django.urls import reverse
-
-from geekshop.geekshop.authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
-
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 
 def login(request):
     login_form = ShopUserLoginForm(data=request.POST)
@@ -14,18 +12,16 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('main'))
+        return HttpResponseRedirect(reverse('main'))
     content = {
         'title': 'вход',
         'login_form': login_form
     }
     return render(request, 'authapp/login.html', content)
 
-
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('main'))
-
 
 def register(request):
     if request.method == 'POST':

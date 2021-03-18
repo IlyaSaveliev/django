@@ -7,7 +7,7 @@ from django.core.management import BaseCommand
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
 
-from geekshop.geekshop.authapp.models import ShopUser
+
 
 
 def load_from_json(file_name):
@@ -16,7 +16,7 @@ def load_from_json(file_name):
 
 class Command(BaseCommand):
 
-    def handle(self, ShopUser=None, *args, **options):
+    def handle(self, *args, **options):
         categories = load_from_json('categories')
 
         ProductCategory.objects.all().delete()
@@ -31,5 +31,6 @@ class Command(BaseCommand):
             prod['category'] = _cat
             Product.objects.create(**prod)
 
-            ShopUser.objects.create_superuser('`django', 'django@local.db', 'geekbrains', age=18)
+
+        ShopUser.objects.create_superuser('django', 'django@local.db', 'geekbrains', age=18)
 

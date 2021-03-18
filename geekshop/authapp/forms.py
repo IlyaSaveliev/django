@@ -1,7 +1,6 @@
-from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-
-from geekshop.geekshop.authapp.models import ShopUser
+from authapp.models import ShopUser
+from django import forms
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -9,11 +8,10 @@ class ShopUserLoginForm(AuthenticationForm):
         model = ShopUser
         fields = ('username', 'password',)
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            for field_name, field in self.fields.item():
-                field.widget.attrs['class'] = 'form-control'
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 class ShopUserRegisterForm(UserCreationForm):
     class Meta:
@@ -22,7 +20,7 @@ class ShopUserRegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.item():
+        for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 
     def clean_age(self):
@@ -31,8 +29,6 @@ class ShopUserRegisterForm(UserCreationForm):
             raise forms.ValidationError('Доступ только с 18-ти лет!')
         return data
 
-
-
 class ShopUserEditForm(UserChangeForm):
     class Meta:
         model = ShopUser
@@ -40,7 +36,7 @@ class ShopUserEditForm(UserChangeForm):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            for field_name, field in self.fields.item():
+            for field_name, field in self.fields.items():
                 field.widget.attrs['class'] = 'form-control'
                 if field_name == 'password':
                     field.widget = forms.HiddenInput()
