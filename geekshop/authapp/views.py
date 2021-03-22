@@ -4,6 +4,7 @@ from django.contrib import auth
 from django.urls import reverse
 from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 
+
 def login(request):
     title = 'вход'
 
@@ -27,9 +28,11 @@ def login(request):
     }
     return render(request, 'authapp/login.html', content)
 
+
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('main'))
+
 
 def register(request):
     if request.method == 'POST':
