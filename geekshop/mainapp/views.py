@@ -3,7 +3,9 @@ import random
 import os
 from typing import List, Any
 
+from IPython.core import page
 from django.conf import settings
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 # noinspection PyUnresolvedReferences
 from mainapp.models import Product, ProductCategory
@@ -41,21 +43,33 @@ def main(request):
 def products(request, pk=None):
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
+    basket = get_basket(request.user)
+    page = request.GET.get('p', 1)
 
     if pk is not None:
         if pk == 0:
-            products_list = Product.objects.all().order_by('price')
-            category_item = {'name': 'все', 'pk': 0}
+            products = Product.objects.all().order_by('price')
+            category = {'name': 'все', 'pk': 0}
         else:
-            category_item = get_object_or_404(ProductCategory, pk=pk)
-            products_list = Product.objects.filter(category=category_item)
+            category = get_object_or_404(ProductCategory, pk=pk)
+            products = Product.objects.filter(category__pk=pk).order_by('price')
+
+        paginator = Paginator(products, 2)
+
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+
 
         content = {
             'title': title,
             'links_menu': links_menu,
-            'category': category_item,
-            'products': products_list,
-            'basket': get_basket(request.user)
+            'category': category,
+            'products': products_paginator,
+            'basket': basket
         }
         return render(request, 'mainapp/products_list.html', content)
 
