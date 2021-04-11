@@ -5,6 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from authapp.models import ShopUser
 from django import forms
 
+from authapp.models import ShopUserProfile
+
 
 class ShopUserLoginForm(AuthenticationForm):
     class Meta:
@@ -15,6 +17,7 @@ class ShopUserLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
 
 class ShopUserRegisterForm(UserCreationForm):
     class Meta:
@@ -46,15 +49,28 @@ class ShopUserEditForm(UserChangeForm):
         model = ShopUser
         fields = ('username', 'email', 'first_name', 'age', 'avatar', 'password',)
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            for field_name, field in self.fields.items():
-                field.widget.attrs['class'] = 'form-control'
-                if field_name == 'password':
-                    field.widget = forms.HiddenInput()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
+            if field_name == 'password':
+                field.widget = forms.HiddenInput()
 
     def clean_age(self):
         data = self.cleaned_data['age']
         if data < 18:
             raise forms.ValidationError('Доступ только с 18-ти лет!')
         return data
+
+
+class ShopUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tag_line', 'about_me', 'gender')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''

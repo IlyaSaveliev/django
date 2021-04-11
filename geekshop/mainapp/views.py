@@ -42,7 +42,6 @@ def main(request):
 def products(request, pk=None):
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
-    basket = get_basket(request.user)
     page = request.GET.get('p', 1)
 
     if pk is not None:
