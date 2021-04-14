@@ -39,9 +39,9 @@ def save_user_profile(backend, user, response, *args, **kwargs):
             user.shopuserprofile.gender = ShopUserProfile.MALE
 
     if data['photo_max'] and not user.avatar:
-        url = data['photo_max']
-        image_name = url.split("/")[-1].split("?")[0]
-        pars = requests.get(url)
+        photo = data['photo_max']
+        image_name = photo.split("/")[-1].split("?")[0]
+        pars = requests.get(photo)
         with open(os.path.join(settings.BASE_DIR, f'media/users_avatars/{image_name}'), "wb") as f:
             f.write(pars.content)
 
@@ -51,9 +51,9 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         user.shopuserprofile.aboutMe = data['about']
 
     if data['bdate']:
-        bdate = datetime.datetime.strptime(data['bdate'], '%d.%m.%Y').date()
+        bdate = datetime.strptime(data['bdate'], '%d.%m.%Y').date()
 
-        age = datetime.timezone.now().date().year - bdate.year
+        age = datetime.now().date().year - bdate.year
         if age < 18:
             user.delete()
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')

@@ -5,7 +5,6 @@ from django.urls import path
 from django.conf.urls import include
 from mainapp import views as mainapp
 
-
 urlpatterns = [
     path('', mainapp.main, name='main'),
     path('products/', include('mainapp.urls', namespace='products')),
@@ -15,6 +14,7 @@ urlpatterns = [
 
     path('admin/', include('adminapp.urls', namespace='admin')),
     path('', include('social_django.urls', namespace='social')),
+    path('order/', include('ordersapp.urls', namespace='order')),
 
     # path('admin/', admin.site.urls),
 ]
